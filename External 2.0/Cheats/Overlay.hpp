@@ -15,7 +15,12 @@
 
 namespace Overlay
 {
-    extern int test;
+    extern int iTab;
+
+    extern bool bBoxes;
+    extern bool bHealthbar;
+
+
     extern bool bMenuVisible;
     int init(HINSTANCE instance, INT cmd_show);
 }

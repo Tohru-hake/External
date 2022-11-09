@@ -2,7 +2,11 @@
 #include "../Memory/Memory.hpp"
 
 bool Overlay::bMenuVisible = false;
-int Overlay::test = 0;
+int Overlay::iTab = 0;
+
+bool Overlay::bBoxes = false;
+bool Overlay::bHealthbar = false;
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND, UINT, WPARAM, LPARAM);
 
 int Width = GetSystemMetrics(SM_CXSCREEN);
@@ -280,7 +284,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
             if (!Base)
                 continue;
 
-            if (!Entity::isValid(Base))
+            if (!(Entity::isAlive(Base) && Entity::getEntTeam(Base) != 0))
                 continue;
 
             if (Entity::getEntTeam(Base) == LocalPlayer::getLocalTeam())
@@ -298,30 +302,38 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
 
                 if (Entity::isDormant(Base))
                 {
-                    ImGui::GetBackgroundDrawList()->AddRect({ top.x - w, top.y }, { top.x + w, bottom.y }, ImColor(100.f, 100.f, 100.f), 10.f);
+                    if (Overlay::bBoxes)
+                    {
+                        ImGui::GetBackgroundDrawList()->AddRect({ top.x - w, top.y }, { top.x + w, bottom.y }, ImColor(100.f, 100.f, 100.f), 10.f);
+                    }
                 }
                 else
                 {
-                    ImGui::GetBackgroundDrawList()->AddRect({ top.x - w, top.y }, { top.x + w, bottom.y }, ImColor(255.f, 255.f, 255.f));
+                    if (Overlay::bBoxes)
+                    {
+                        ImGui::GetBackgroundDrawList()->AddRect({ top.x - w, top.y }, { top.x + w, bottom.y }, ImColor(255.f, 255.f, 255.f));
+                    }
+                    
+                    if (Overlay::bHealthbar)
+                    {
+                        float box_h = (float)fabs(bottom.y - top.y);
+
+                        float offset = 8;
+
+                        int height = (box_h * Entity::getEntHp(Base)) / 100;
 
 
-                    float box_h = (float)fabs(bottom.y - top.y);
+                        int green = int(Entity::getEntHp(Base) * 2.55f);
+                        int red = 255 - green;
 
-                    float offset = 8;
+                        int x = top.x - w - offset;
+                        int y = bottom.y;
+                        int w = 4;
+                        int h = box_h;
 
-                    int height = (box_h * Entity::getEntHp(Base)) / 100;
-
-
-                    int green = int(Entity::getEntHp(Base) * 2.55f);
-                    int red = 255 - green;
-
-                    int x = top.x - w - offset;
-                    int y = bottom.y;
-                    int w = 4;
-                    int h = box_h;
-
-                    RenderBox(x, y, x + w, y - h, ImColor(0, 0, 0), 1.f, true);
-                    RenderBox(x + 1, y - 2, x + w - 1, y - height + 1, ImColor(red, green, 0, 255), 1.f, true);
+                        RenderBox(x, y, x + w, y - h, ImColor(0, 0, 0), 1.f, true);
+                        RenderBox(x + 1, y - 2, x + w - 1, y - height + 1, ImColor(red, green, 0, 255), 1.f, true);
+                    }
                 }
             }
         }
@@ -346,109 +358,133 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
             
             ImGui::Begin("Hydra", &bMenuVisible, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
 
-            static int tabb = 0;
+            
 
             //defining and making the tabs
  
 		    
-		    //if (ImGui::Button("Visuals", ImVec2(150, 25)))
-		    //{
-			   // tabb = 0;
-		    //}
-		    //ImGui::SameLine();
+		    if (ImGui::Button("Aimbot", ImVec2(150, 25)))
+		    {
+                Overlay::iTab = 0;
+		    }
+
+            ImGui::SameLine();
+
+            if (ImGui::Button("Triggerbot", ImVec2(150, 25)))
+            {
+                Overlay::iTab = 1;
+            }
+
+		    ImGui::SameLine();
  
-		    //if (ImGui::Button("Aimbot", ImVec2(150, 25)))
-		    //{
-			   // tabb = 1;
-		    //}
-		    //ImGui::SameLine();
-		    //if (ImGui::Button("Anti-aim", ImVec2(150, 25)))
-		    //{
-			   // tabb = 2;
-		    //}
-		    //ImGui::SameLine();
-		    //if (ImGui::Button("Misc", ImVec2(150, 25)))
-		    //{
-			   // tabb = 3;
-		    //}
+            if (ImGui::Button("Visuals", ImVec2(150, 25)))
+            {
+                Overlay::iTab = 2;
+            }
+
+		    ImGui::SameLine();
+		    if (ImGui::Button("Misc", ImVec2(150, 25)))
+		    {
+                Overlay::iTab = 3;
+		    }
 					
 
-            ImGui::Text("Welcome to External 2.0");
-            ImGui::Text("Now with multithreading!");
 
-            ImGui::Checkbox("Aimbot", &Aimbot::bEnabled);
-            if (Aimbot::bEnabled)
+            switch (Overlay::iTab)
             {
-                ImGui::Text("Aim Key");
-                ImGui::SameLine();
-                ImGui::Hotkey(&Aimbot::AimKey);
-                ImGui::SliderFloat("Fov", &Aimbot::fFov, 1.f, 10.f);
-                ImGui::SliderFloat("Smoothing", &Aimbot::fSmoothing, 1.f, 10.f);
+            case 0:
+            {
+                ImGui::Text("Welcome to External 2.0");
+                ImGui::Text("Now with multithreading!");
 
-                if (ImGui::BeginCombo("Hitbox", Aimbot::current_hitbox))
+                ImGui::Checkbox("Enable", &Aimbot::bEnabled);
+                if (Aimbot::bEnabled)
                 {
-                    for (int n = 0; n < ((int)(sizeof(Aimbot::hitboxes) / sizeof(*(Aimbot::hitboxes)))); n++)
+                    ImGui::Text("Aim Key");
+                    ImGui::SameLine();
+                    ImGui::Hotkey(&Aimbot::AimKey);
+                    ImGui::SliderFloat("Fov", &Aimbot::fFov, 1.f, 10.f);
+                    ImGui::SliderFloat("Smoothing", &Aimbot::fSmoothing, 1.f, 10.f);
+
+                    if (ImGui::BeginCombo("Hitbox", Aimbot::current_hitbox))
                     {
-                        bool is_selected = (Aimbot::current_hitbox == Aimbot::hitboxes[n]);
-                        if (ImGui::Selectable(Aimbot::hitboxes[n], is_selected))
+                        for (int n = 0; n < ((int)(sizeof(Aimbot::hitboxes) / sizeof(*(Aimbot::hitboxes)))); n++)
                         {
-                            Aimbot::current_hitbox = Aimbot::hitboxes[n];
+                            bool is_selected = (Aimbot::current_hitbox == Aimbot::hitboxes[n]);
+                            if (ImGui::Selectable(Aimbot::hitboxes[n], is_selected))
+                            {
+                                Aimbot::current_hitbox = Aimbot::hitboxes[n];
+                            }
+                            if (is_selected)
+                                ImGui::SetItemDefaultFocus();
                         }
-                        if (is_selected)
-                            ImGui::SetItemDefaultFocus();
+                        ImGui::EndCombo();
                     }
-                    ImGui::EndCombo();
                 }
+                //TODO: STANDALONE RECOIL.
+                ImGui::Checkbox("RCS", &Aimbot::bRecoil);
+                if (Aimbot::bRecoil)
+                {
+                    ImGui::SliderFloat("Recoil X", &Aimbot::fRecoilX, 0.f, 1.f);
+                    ImGui::SliderFloat("Recoil Y", &Aimbot::fRecoilY, 0.f, 1.f);
+                }
+
+                break;
             }
-            //TODO: STANDALONE RECOIL.
-            ImGui::Checkbox("RCS", &Aimbot::bRecoil);
-            if (Aimbot::bRecoil)
+            case 1:
             {
-                ImGui::SliderFloat("Recoil X", &Aimbot::fRecoilX, 0.f, 1.f);
-                ImGui::SliderFloat("Recoil Y", &Aimbot::fRecoilY, 0.f, 1.f);
-            }
+                ImGui::Checkbox("Enable", &triggerbot::bTriggerEnabled);
+                if (triggerbot::bTriggerEnabled)
+                {
+                    ImGui::Text("Trigger Key");
+                    ImGui::SameLine();
+                    ImGui::Hotkey(&triggerbot::TriggerKey);
 
-            ImGui::Separator();
-            
-            ImGui::Checkbox("Triggerbot", &triggerbot::bTriggerEnabled);
-            if (triggerbot::bTriggerEnabled)
+                    ImGui::SliderInt("Delay Min", &triggerbot::iMinDelay, 1, 100);
+                    ImGui::SliderInt("Delay Max", &triggerbot::iMaxDelay, 1, 100);
+                }
+                break;
+            }
+            case 2:
             {
-                ImGui::Text("Trigger Key");
-                ImGui::SameLine();
-                ImGui::Hotkey(&triggerbot::TriggerKey);
-
-                ImGui::SliderInt("Delay Min", &triggerbot::iMinDelay, 1, 100);
-                ImGui::SliderInt("Delay Max", &triggerbot::iMaxDelay, 1, 100);
+                ImGui::Checkbox("Boxes", &Overlay::bBoxes);
+                ImGui::Checkbox("Health Bar", &Overlay::bHealthbar);
+                break;
             }
-
-            ImGui::Separator();
-
-            ImGui::Checkbox("Bhop", &bhop::bBhopEnabled);
-            if (bhop::bBhopEnabled)
+            case 3:
             {
-                ImGui::SliderInt("Delay Min", &bhop::iMinDelay, 1, 100);
-                ImGui::SliderInt("Delay Max", &bhop::iMaxDelay, 1, 100);
+                ImGui::Checkbox("Bhop", &bhop::bBhopEnabled);
+                if (bhop::bBhopEnabled)
+                {
+                    ImGui::SliderInt("Delay Min", &bhop::iMinDelay, 1, 100);
+                    ImGui::SliderInt("Delay Max", &bhop::iMaxDelay, 1, 100);
+                }
+
+
+
+                if (ImGui::Button("Exit"))
+                {
+                    exit(0);
+                }
+                auto fps = ImGui::GetIO().Framerate;
+
+                char buffer[64];
+                int ret = snprintf(buffer, sizeof buffer, "%f", fps);
+
+                if (ret < 0) {
+                    return EXIT_FAILURE;
+                }
+                if (ret >= sizeof buffer) {
+                    /* Result was truncated - resize the buffer and retry.*/
+                }
+
+                ImGui::Text(buffer);
+                break;
+            }
+            default:
+                break;
             }
 
-            
-
-            if (ImGui::Button("Exit"))
-            {
-                exit(0);
-            }
-            auto fps = ImGui::GetIO().Framerate;
-
-            char buffer[64];
-            int ret = snprintf(buffer, sizeof buffer, "%f", fps);
-
-            if (ret < 0) {
-                return EXIT_FAILURE;
-            }
-            if (ret >= sizeof buffer) {
-                /* Result was truncated - resize the buffer and retry.*/
-            }
-
-            ImGui::Text(buffer);
             ImGui::End();
         }
 
