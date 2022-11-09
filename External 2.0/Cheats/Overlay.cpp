@@ -372,16 +372,15 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
                     }
                     ImGui::EndCombo();
                 }
-
-
-                ImGui::Checkbox("RCS", &Aimbot::bRecoil);
-                if (Aimbot::bRecoil)
-                {
-                    ImGui::SliderFloat("Recoil X", &Aimbot::fRecoilX, 0.f, 1.f);
-                    ImGui::SliderFloat("Recoil Y", &Aimbot::fRecoilY, 0.f, 1.f);
-                }
-
             }
+            //TODO: STANDALONE RECOIL.
+            ImGui::Checkbox("RCS", &Aimbot::bRecoil);
+            if (Aimbot::bRecoil)
+            {
+                ImGui::SliderFloat("Recoil X", &Aimbot::fRecoilX, 0.f, 1.f);
+                ImGui::SliderFloat("Recoil Y", &Aimbot::fRecoilY, 0.f, 1.f);
+            }
+
             
             ImGui::Checkbox("Triggerbot", &triggerbot::bTriggerEnabled);
             if (triggerbot::bTriggerEnabled)

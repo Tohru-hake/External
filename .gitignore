@@ -30,3 +30,18 @@
 *.exe
 *.out
 *.app
+*.vsidx
+*.lock
+*.db
+.vs/External 2.0/v17/.suo
+*.db-wal
+*.db-shm
+*.ipch
+*.opendb
+*.txt
+*.recipe
+*.ilk
+*.log
+*.tlog
+*.pdb
+*.idb
