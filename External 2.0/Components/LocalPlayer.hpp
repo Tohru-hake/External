@@ -19,11 +19,13 @@ namespace LocalPlayer
 	extern Vector3			getLocalViewAngles();											//Get the local player view angles
 	extern Vector3		    getLocalPunchAngles();											//Get the local player punch angles (recoil)
 	extern std::int32_t		getLocalPlayerId();												//Get the local player id
+	extern int				getLocalWeapon();
 
 	//Void functions 
 	extern void				forceJump(int waitTime = 35);									//Force the local player to jump
 	extern void				setLocalPlayer();												//Set the local player base address
 	extern void				setLocalViewAngles(Vector3 angles);								//Set the local player view angles
+	
 
 	extern DWORD			LocalBaseaddress;												//Localplayer base address
 }

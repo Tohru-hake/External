@@ -9,7 +9,7 @@ void bhop::init()
 	{
 		if (bhop::iMinDelay > bhop::iMaxDelay)
 		{
-			bhop::iMaxDelay = iMinDelay + 1;
+			bhop::iMaxDelay = iMinDelay;
 		}
 
 		if (!bBhopEnabled)

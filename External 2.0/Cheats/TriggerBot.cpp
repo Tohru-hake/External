@@ -10,7 +10,7 @@ bool triggerbot::ShouldTriggerbot(const int crosshairId)
 
 	if (triggerbot::iMinDelay > triggerbot::iMaxDelay)
 	{
-		triggerbot::iMaxDelay = triggerbot::iMinDelay + 1;
+		triggerbot::iMaxDelay = triggerbot::iMinDelay;
 	}
 
 	if (Overlay::bMenuVisible)

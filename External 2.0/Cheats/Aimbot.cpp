@@ -38,6 +38,9 @@ void Aimbot::Aimbot()
 		if (!Aimbot::bEnabled)
 			continue;
 
+		if (Entity::isWeaponNonAim(LocalPlayer::getLocalWeapon()))
+			continue;
+
 		if (!Base)
 			continue;
 

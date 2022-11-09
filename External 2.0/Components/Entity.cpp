@@ -105,42 +105,63 @@ DWORD Entity::getActiveWeapon(DWORD playerBase)
 	return rpm<DWORD>((baseAddress + hazedumper::signatures::dwEntityList + WeaponIndex * 0x10) - 0x10);
 }
 
-//Uses ClassID
-bool Entity::isWeaponNonAim(int classID)
-{
-	if (classID == CKnife || classID == CKnifeGG || classID == CFlashbang || classID == CHEGrenade || classID == CSmokeGrenade
-		|| classID == CMolotovGrenade || classID == CDecoyGrenade || classID == CIncendiaryGrenade || classID == CC4)
-		return true;
-	return false;
-}
+////Uses ClassID
+//bool Entity::isWeaponNonAim(int classID)
+//{
+//	if (classID == CKnife || classID == CKnifeGG || classID == CFlashbang || classID == CHEGrenade || classID == CSmokeGrenade
+//		|| classID == CMolotovGrenade || classID == CDecoyGrenade || classID == CIncendiaryGrenade || classID == CC4)
+//		return true;
+//	return false;
+//}
 
 //Uses iItemDefinitionIndex
-bool Entity::isWeaponNonAim2(int iWeaponID)
+bool Entity::isWeaponNonAim(int iWeaponID)
 {
-	if (iWeaponID == weapon_knife || iWeaponID == weapon_knifegg || iWeaponID == weapon_flashbang || iWeaponID == weapon_hegrenade || iWeaponID == weapon_smokegrenade
-		|| iWeaponID == weapon_molotov || iWeaponID == weapon_decoy || iWeaponID == weapon_c4 || iWeaponID == weapon_incgrenade)
+	if (   iWeaponID == weapon::WEAPON_KNIFE	
+		|| iWeaponID == weapon::WEAPON_KNIFE_BAYONET
+		|| iWeaponID == weapon::WEAPON_KNIFE_BUTTERFLY
+		|| iWeaponID == weapon::WEAPON_KNIFE_FALCHION
+		|| iWeaponID == weapon::WEAPON_KNIFE_FLIP
+		|| iWeaponID == weapon::WEAPON_KNIFE_GUT
+		|| iWeaponID == weapon::WEAPON_KNIFE_KARAMBIT
+		|| iWeaponID == weapon::WEAPON_KNIFE_M9_BAYONET
+		|| iWeaponID == weapon::WEAPON_KNIFE_PUSH
+		|| iWeaponID == weapon::WEAPON_KNIFE_T
+		|| iWeaponID == weapon::WEAPON_KNIFE_SURVIVAL_BOWIE
+		|| iWeaponID == weapon::WEAPON_KNIFE_TACTICAL
+		|| iWeaponID == weapon::WEAPON_FLASHBANG
+		|| iWeaponID == weapon::WEAPON_HEGRENADE
+		|| iWeaponID == weapon::WEAPON_SMOKEGRENADE
+		|| iWeaponID == weapon::WEAPON_MOLOTOV
+		|| iWeaponID == weapon::WEAPON_DECOY
+		|| iWeaponID == weapon::WEAPON_C4
+		|| iWeaponID == weapon::WEAPON_INCGRENADE)
+	{
+		std::cout << "knife";
 		return true;
+	}
+
 	return false;
 }
 
-//Uses ClassID
-bool Entity::isWeaponPistol(int classID)
-{
-	if (classID == CDEagle || classID == CWeaponElite || classID == CWeaponFiveSeven || classID == CWeaponGlock
-		|| classID == CWeaponP228 || classID == CWeaponUSP || classID == CWeaponTec9 || classID == CWeaponTaser || classID == CWeaponHKP2000 || classID == CWeaponP250)
-		return true;
+////Uses ClassID
+//bool Entity::isWeaponPistol(int classID)
+//{
+//	if (classID == CDEagle || classID == CWeaponElite || classID == CWeaponFiveSeven || classID == CWeaponGlock
+//		|| classID == CWeaponP228 || classID == CWeaponUSP || classID == CWeaponTec9 || classID == CWeaponTaser || classID == CWeaponHKP2000 || classID == CWeaponP250)
+//		return true;
+//
+//	return false;
+//}
 
-	return false;
-}
-
-//Uses ClassID
-bool Entity::isWeaponSniper(int classID)
-{
-	if (classID == CWeaponAWP || classID == CWeaponSSG08 || classID == CWeaponG3SG1 || classID == CWeaponSCAR20)
-		return true;
-
-	return false;
-}
+////Uses ClassID
+//bool Entity::isWeaponSniper(int classID)
+//{
+//	if (classID == CWeaponAWP || classID == CWeaponSSG08 || classID == CWeaponG3SG1 || classID == CWeaponSCAR20)
+//		return true;
+//
+//	return false;
+//}
 
 int	Entity::getEntClassID(DWORD entity)
 {
