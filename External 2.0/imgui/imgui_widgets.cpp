@@ -739,8 +739,8 @@ void ImGui::Hotkey(int* k, const ImVec2& size_arg)
             waitingforkey = true;
     }
     if (waitingforkey == true) {
-        ImGui::Button("...", size_arg);
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        //ImGui::Button("...", size_arg);
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
         for (auto& Key : KeyCodes)
         {
             if (GetAsyncKeyState(Key)) {

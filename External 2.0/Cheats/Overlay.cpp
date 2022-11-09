@@ -346,6 +346,33 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
             
             ImGui::Begin("Hydra", &bMenuVisible, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
 
+            static int tabb = 0;
+
+            //defining and making the tabs
+ 
+		    
+		    //if (ImGui::Button("Visuals", ImVec2(150, 25)))
+		    //{
+			   // tabb = 0;
+		    //}
+		    //ImGui::SameLine();
+ 
+		    //if (ImGui::Button("Aimbot", ImVec2(150, 25)))
+		    //{
+			   // tabb = 1;
+		    //}
+		    //ImGui::SameLine();
+		    //if (ImGui::Button("Anti-aim", ImVec2(150, 25)))
+		    //{
+			   // tabb = 2;
+		    //}
+		    //ImGui::SameLine();
+		    //if (ImGui::Button("Misc", ImVec2(150, 25)))
+		    //{
+			   // tabb = 3;
+		    //}
+					
+
             ImGui::Text("Welcome to External 2.0");
             ImGui::Text("Now with multithreading!");
 
@@ -381,6 +408,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
                 ImGui::SliderFloat("Recoil Y", &Aimbot::fRecoilY, 0.f, 1.f);
             }
 
+            ImGui::Separator();
             
             ImGui::Checkbox("Triggerbot", &triggerbot::bTriggerEnabled);
             if (triggerbot::bTriggerEnabled)
@@ -392,6 +420,8 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
                 ImGui::SliderInt("Delay Min", &triggerbot::iMinDelay, 1, 100);
                 ImGui::SliderInt("Delay Max", &triggerbot::iMaxDelay, 1, 100);
             }
+
+            ImGui::Separator();
 
             ImGui::Checkbox("Bhop", &bhop::bBhopEnabled);
             if (bhop::bBhopEnabled)
