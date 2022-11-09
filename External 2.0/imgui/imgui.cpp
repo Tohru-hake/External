@@ -1011,7 +1011,6 @@ static void             UpdateDebugToolItemPicker();
 static void             UpdateDebugToolStackQueries();
 
 // Misc
-static void             UpdateSettings();
 static void             UpdateKeyboardInputs();
 static void             UpdateMouseInputs();
 static void             UpdateMouseWheel();
@@ -4518,9 +4517,6 @@ void ImGui::NewFrame()
     // Check and assert for various common IO and Configuration mistakes
     ErrorCheckNewFrameSanityChecks();
 
-    // Load settings on first frame, save settings when modified (after a delay)
-    UpdateSettings();
-
     g.Time += g.IO.DeltaTime;
     g.WithinFrameScope = true;
     g.FrameCount += 1;
@@ -4801,10 +4797,6 @@ void ImGui::Shutdown()
     // Cleanup of other data are conditional on actually having initialized Dear ImGui.
     if (!g.Initialized)
         return;
-
-    // Save settings (unless we haven't attempted to load them: CreateContext/DestroyContext without a call to NewFrame shouldn't save an empty file)
-    if (g.SettingsLoaded && g.IO.IniFilename != NULL)
-        SaveIniSettingsToDisk(g.IO.IniFilename);
 
     CallContextHooks(&g, ImGuiContextHookType_Shutdown);
 
@@ -11973,32 +11965,32 @@ void ImGui::LogButtons()
 //-----------------------------------------------------------------------------
 
 // Called by NewFrame()
-void ImGui::UpdateSettings()
-{
-    // Load settings on first frame (if not explicitly loaded manually before)
-    ImGuiContext& g = *GImGui;
-    if (!g.SettingsLoaded)
-    {
-        IM_ASSERT(g.SettingsWindows.empty());
-        if (g.IO.IniFilename)
-            LoadIniSettingsFromDisk(g.IO.IniFilename);
-        g.SettingsLoaded = true;
-    }
-
-    // Save settings (with a delay after the last modification, so we don't spam disk too much)
-    if (g.SettingsDirtyTimer > 0.0f)
-    {
-        g.SettingsDirtyTimer -= g.IO.DeltaTime;
-        if (g.SettingsDirtyTimer <= 0.0f)
-        {
-            if (g.IO.IniFilename != NULL)
-                SaveIniSettingsToDisk(g.IO.IniFilename);
-            else
-                g.IO.WantSaveIniSettings = true;  // Let user know they can call SaveIniSettingsToMemory(). user will need to clear io.WantSaveIniSettings themselves.
-            g.SettingsDirtyTimer = 0.0f;
-        }
-    }
-}
+//void ImGui::UpdateSettings()
+//{
+//    // Load settings on first frame (if not explicitly loaded manually before)
+//    ImGuiContext& g = *GImGui;
+//    if (!g.SettingsLoaded)
+//    {
+//        IM_ASSERT(g.SettingsWindows.empty());
+//        if (g.IO.IniFilename)
+//            LoadIniSettingsFromDisk(g.IO.IniFilename);
+//        g.SettingsLoaded = true;
+//    }
+//
+//    // Save settings (with a delay after the last modification, so we don't spam disk too much)
+//    if (g.SettingsDirtyTimer > 0.0f)
+//    {
+//        g.SettingsDirtyTimer -= g.IO.DeltaTime;
+//        if (g.SettingsDirtyTimer <= 0.0f)
+//        {
+//            if (g.IO.IniFilename != NULL)
+//                SaveIniSettingsToDisk(g.IO.IniFilename);
+//            else
+//                g.IO.WantSaveIniSettings = true;  // Let user know they can call SaveIniSettingsToMemory(). user will need to clear io.WantSaveIniSettings themselves.
+//            g.SettingsDirtyTimer = 0.0f;
+//        }
+//    }
+//}
 
 void ImGui::MarkIniSettingsDirty()
 {
@@ -12086,16 +12078,16 @@ void ImGui::ClearIniSettings()
             g.SettingsHandlers[handler_n].ClearAllFn(&g, &g.SettingsHandlers[handler_n]);
 }
 
-void ImGui::LoadIniSettingsFromDisk(const char* ini_filename)
-{
-    size_t file_data_size = 0;
-    char* file_data = (char*)ImFileLoadToMemory(ini_filename, "rb", &file_data_size);
-    if (!file_data)
-        return;
-    if (file_data_size > 0)
-        LoadIniSettingsFromMemory(file_data, (size_t)file_data_size);
-    IM_FREE(file_data);
-}
+//void ImGui::LoadIniSettingsFromDisk(const char* ini_filename)
+//{
+//    size_t file_data_size = 0;
+//    char* file_data = (char*)ImFileLoadToMemory(ini_filename, "rb", &file_data_size);
+//    if (!file_data)
+//        return;
+//    if (file_data_size > 0)
+//        LoadIniSettingsFromMemory(file_data, (size_t)file_data_size);
+//    IM_FREE(file_data);
+//}
 
 // Zero-tolerance, no error reporting, cheap .ini parsing
 void ImGui::LoadIniSettingsFromMemory(const char* ini_data, size_t ini_size)
@@ -12168,21 +12160,21 @@ void ImGui::LoadIniSettingsFromMemory(const char* ini_data, size_t ini_size)
             g.SettingsHandlers[handler_n].ApplyAllFn(&g, &g.SettingsHandlers[handler_n]);
 }
 
-void ImGui::SaveIniSettingsToDisk(const char* ini_filename)
-{
-    ImGuiContext& g = *GImGui;
-    g.SettingsDirtyTimer = 0.0f;
-    if (!ini_filename)
-        return;
-
-    size_t ini_data_size = 0;
-    const char* ini_data = SaveIniSettingsToMemory(&ini_data_size);
-    ImFileHandle f = ImFileOpen(ini_filename, "wt");
-    if (!f)
-        return;
-    ImFileWrite(ini_data, sizeof(char), ini_data_size, f);
-    ImFileClose(f);
-}
+//void ImGui::SaveIniSettingsToDisk(const char* ini_filename)
+//{
+//    ImGuiContext& g = *GImGui;
+//    g.SettingsDirtyTimer = 0.0f;
+//    if (!ini_filename)
+//        return;
+//
+//    size_t ini_data_size = 0;
+//    const char* ini_data = SaveIniSettingsToMemory(&ini_data_size);
+//    ImFileHandle f = ImFileOpen(ini_filename, "wt");
+//    if (!f)
+//        return;
+//    ImFileWrite(ini_data, sizeof(char), ini_data_size, f);
+//    ImFileClose(f);
+//}
 
 // Call registered handlers (e.g. SettingsHandlerWindow_WriteAll() + custom handlers) to write their stuff into a text buffer
 const char* ImGui::SaveIniSettingsToMemory(size_t* out_size)
@@ -12939,8 +12931,8 @@ void ImGui::ShowMetricsWindow(bool* p_open)
         if (SmallButton("Save to memory"))
             SaveIniSettingsToMemory();
         SameLine();
-        if (SmallButton("Save to disk"))
-            SaveIniSettingsToDisk(g.IO.IniFilename);
+        //if (SmallButton("Save to disk"))
+        //    SaveIniSettingsToDisk(g.IO.IniFilename);
         SameLine();
         if (g.IO.IniFilename)
             Text("\"%s\"", g.IO.IniFilename);
