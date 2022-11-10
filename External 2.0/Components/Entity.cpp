@@ -69,6 +69,13 @@ Vector3 Entity::getEntEyePos(DWORD playerBase)
 	return ((Entity::getEntPos(playerBase)) + (rpm<Vector3>(playerBase + hazedumper::netvars::m_vecViewOffset)));
 }
 
+Vector3 Entity::getEntEyeAngle(DWORD playerBase)
+{
+	float AngleX = rpm<float>(playerBase + hazedumper::netvars::m_angEyeAnglesX);
+	float AngleY = rpm<float>(playerBase + hazedumper::netvars::m_angEyeAnglesY);
+	return Vector3{ AngleX, AngleY, 0.f };
+}
+
 bool Entity::getEntScoped(DWORD playerBase)
 {
 	return rpm<bool>(playerBase + hazedumper::netvars::m_bIsScoped);
@@ -117,7 +124,24 @@ DWORD Entity::getActiveWeapon(DWORD playerBase)
 //Uses iItemDefinitionIndex
 bool Entity::isWeaponNonAim(int iWeaponID)
 {
-	if (   iWeaponID == weapon::WEAPON_KNIFE	
+	if (   isWeaponKnife(iWeaponID)
+		|| iWeaponID == weapon::WEAPON_FLASHBANG
+		|| iWeaponID == weapon::WEAPON_HEGRENADE
+		|| iWeaponID == weapon::WEAPON_SMOKEGRENADE
+		|| iWeaponID == weapon::WEAPON_MOLOTOV
+		|| iWeaponID == weapon::WEAPON_DECOY
+		|| iWeaponID == weapon::WEAPON_C4
+		|| iWeaponID == weapon::WEAPON_INCGRENADE)
+	return true;
+	
+
+	return false;
+}
+
+bool Entity::isWeaponKnife(int iWeaponID)
+{
+	if (
+		   iWeaponID == weapon::WEAPON_KNIFE
 		|| iWeaponID == weapon::WEAPON_KNIFE_BAYONET
 		|| iWeaponID == weapon::WEAPON_KNIFE_BUTTERFLY
 		|| iWeaponID == weapon::WEAPON_KNIFE_FALCHION
@@ -128,18 +152,8 @@ bool Entity::isWeaponNonAim(int iWeaponID)
 		|| iWeaponID == weapon::WEAPON_KNIFE_PUSH
 		|| iWeaponID == weapon::WEAPON_KNIFE_T
 		|| iWeaponID == weapon::WEAPON_KNIFE_SURVIVAL_BOWIE
-		|| iWeaponID == weapon::WEAPON_KNIFE_TACTICAL
-		|| iWeaponID == weapon::WEAPON_FLASHBANG
-		|| iWeaponID == weapon::WEAPON_HEGRENADE
-		|| iWeaponID == weapon::WEAPON_SMOKEGRENADE
-		|| iWeaponID == weapon::WEAPON_MOLOTOV
-		|| iWeaponID == weapon::WEAPON_DECOY
-		|| iWeaponID == weapon::WEAPON_C4
-		|| iWeaponID == weapon::WEAPON_INCGRENADE)
-	{
-		std::cout << "knife";
+		|| iWeaponID == weapon::WEAPON_KNIFE_TACTICAL)
 		return true;
-	}
 
 	return false;
 }

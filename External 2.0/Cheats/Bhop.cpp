@@ -12,6 +12,12 @@ void bhop::init()
 			bhop::iMaxDelay = iMinDelay;
 		}
 
+		if (!Overlay::FindTopWindow(pID))
+			continue;
+
+		if (Overlay::bMenuVisible)
+			continue;
+
 		if (!bBhopEnabled)
 			continue;
 

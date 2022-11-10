@@ -9,6 +9,8 @@
 #include "../Math/Math.hpp"
 #include "Aimbot.hpp"
 #include "Bhop.hpp"
+#include "RecoilCrosshair.hpp"
+#include "AutoPistol.hpp"
 
 
 
@@ -19,8 +21,10 @@ namespace Overlay
 
     extern bool bBoxes;
     extern bool bHealthbar;
-
+    extern bool bRecoilCrosshair;
+    
 
     extern bool bMenuVisible;
+    HWND FindTopWindow(DWORD pid);
     int init(HINSTANCE instance, INT cmd_show);
 }

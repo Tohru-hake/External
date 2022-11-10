@@ -6,7 +6,8 @@ int Overlay::iTab = 0;
 
 bool Overlay::bBoxes = false;
 bool Overlay::bHealthbar = false;
-
+bool Overlay::bRecoilCrosshair = false;
+int RecoilCrosshair::opacity = 0;
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND, UINT, WPARAM, LPARAM);
 
 int Width = GetSystemMetrics(SM_CXSCREEN);
@@ -48,7 +49,7 @@ void ShowMenu(HWND Window)
     SetForegroundWindow(Window);
 }
 
-HWND FindTopWindow(DWORD pid)
+HWND Overlay::FindTopWindow(DWORD pid)
 {
     std::pair<HWND, DWORD> params = { 0, pid };
 
@@ -81,8 +82,8 @@ HWND FindTopWindow(DWORD pid)
 void Hidemenu(HWND Window)
 {
     makeTransparent(Window);
-    SetFocus(FindTopWindow(pID));
-    SetForegroundWindow(FindTopWindow(pID));
+    SetFocus(Overlay::FindTopWindow(pID));
+    SetForegroundWindow(Overlay::FindTopWindow(pID));
 }
 
 template <class T>
@@ -104,7 +105,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
         .hCursor = nullptr,
         .hbrBackground = nullptr,
         .lpszMenuName = nullptr,
-        .lpszClassName = L"External Overlay Class", // non-visible class name
+        .lpszClassName = L"Hydra", // non-visible class name
         .hIconSm = nullptr
     };
 
@@ -117,7 +118,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
     const HWND window = CreateWindowExW(
         WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_LAYERED,
         wc.lpszClassName,
-        L"Overlay", //actual window name
+        L"Hydra", //actual window name
         WS_POPUP,
         0,
         0,
@@ -295,7 +296,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
             auto matrix = LocalPlayer::getLocalViewMatrix();
             Vector3 top;
             Vector3 bottom;
-
+            
             if (WorldToScreen(head + Vector3{ 0, 0, 11.f }, top, matrix) && WorldToScreen(feet - Vector3{ 0, 0, 7.f }, bottom, matrix)) {
                 const float h = bottom.y - top.y;
                 const float w = h * 0.35f;
@@ -338,6 +339,20 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
             }
         }
 
+        if (Overlay::bRecoilCrosshair)
+        {
+
+            float x = Width / 2;
+            float y = Height / 2;
+            float dy = Height / 90;
+            float dx = Width / 90;
+            x -= (dx * (LocalPlayer::getLocalPunchAngles().y));
+            y += (dy * (LocalPlayer::getLocalPunchAngles().x));
+
+            ImGui::GetBackgroundDrawList()->AddCircle({ x, y }, 5.f, ImColor(255, 255, 255, RecoilCrosshair::opacity), 0, 2.f);
+        }
+
+
         if (GetAsyncKeyState(VK_INSERT) & 1)
         {
             bMenuVisible = !bMenuVisible;
@@ -351,7 +366,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
                 Hidemenu(window);
             }
         }
-        
+
         //Draw here ;)
         if (bMenuVisible)
         {
@@ -449,6 +464,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
             {
                 ImGui::Checkbox("Boxes", &Overlay::bBoxes);
                 ImGui::Checkbox("Health Bar", &Overlay::bHealthbar);
+                ImGui::Checkbox("Recoil crosshair", &Overlay::bRecoilCrosshair);
                 break;
             }
             case 3:
@@ -460,6 +476,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
                     ImGui::SliderInt("Delay Max", &bhop::iMaxDelay, 1, 100);
                 }
 
+                ImGui::Checkbox("Auto pistol", &autopistol::bAutopistol);
 
 
                 if (ImGui::Button("Exit"))

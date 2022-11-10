@@ -78,6 +78,15 @@
     <ClInclude Include="Util\KeyArray.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Cheats\RecoilCrosshair.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cheats\AutoPistol.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cheats\Knifebot.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory\Memory.cpp">
@@ -123,6 +132,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Cheats\Bhop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cheats\RecoilCrosshair.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cheats\AutoPistol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cheats\Knifebot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

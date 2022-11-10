@@ -21,5 +21,7 @@
 #include "Cheats/Bhop.hpp"
 #include "Cheats/TriggerBot.hpp"
 #include "Cheats/Aimbot.hpp"
+#include "Cheats/RecoilCrosshair.hpp"
 #include "Cheats/Overlay.hpp"
-
+#include "Cheats/AutoPistol.hpp"
+#include "Cheats/Knifebot.hpp"

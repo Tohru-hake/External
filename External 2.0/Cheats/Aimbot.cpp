@@ -28,7 +28,7 @@ void Aimbot::Aimbot()
 {
 	Vector3 bestAngle = { };
 
-	for (int i = 1; i < 32; i++)
+	for (int i = 1; i < 64; i++)
 	{
 		const DWORD Base = Entity::getEntBase(i);
 

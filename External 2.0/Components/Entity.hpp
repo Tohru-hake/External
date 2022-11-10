@@ -114,6 +114,7 @@ namespace Entity
 	extern Vector3			getEntPos(DWORD playerBase);									//Get the entity pos
 	extern char*			getEntName(DWORD playerBase);									//Get the entity name
 	extern Vector3			getEntEyePos(DWORD playerBase);									//Get the entity bone pos
+    extern Vector3			getEntEyeAngle(DWORD playerBase);									//Get the entity eye angle
 	extern DWORD		    getEntBoneMatrix(DWORD playerBase);								//Get the entity bone matrix
 	extern bool				getEntScoped(DWORD playerBase);									//Get the entity scope state - true if they are scoped
 	extern bool				getEntDefusing(DWORD playerBase);								//Get the entity defusing state - true if they are defusing
@@ -125,7 +126,8 @@ namespace Entity
 	//extern bool				isWeaponPistol(int classID);								//Get the weapon id and see if it is a pistol
 	//extern bool				isWeaponSniper(int iWeaponID);								//Get the weapon id and see if it is a sniper
 	extern bool				isWeaponNonAim(int iWeaponID);									//Get the weapon id and see if it is aimbot worthy
-    
+    extern bool             isWeaponKnife(int iWeaponID);
+
 	extern int				getEntClassID(DWORD entity);									//Get the entity class id
 	extern Vector3			getEntBonePos(DWORD playerBase, int boneID);					//Get the position of the desired bone of the entity
 	extern int				getEntAmmo(DWORD playerBase);

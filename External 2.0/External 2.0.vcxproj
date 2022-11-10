@@ -140,8 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Cheats\Aimbot.hpp" />
+    <ClInclude Include="Cheats\AutoPistol.hpp" />
     <ClInclude Include="Cheats\Bhop.hpp" />
+    <ClInclude Include="Cheats\Knifebot.hpp" />
     <ClInclude Include="Cheats\Overlay.hpp" />
+    <ClInclude Include="Cheats\RecoilCrosshair.hpp" />
     <ClInclude Include="Cheats\TriggerBot.hpp" />
     <ClInclude Include="Components\Entity.hpp" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -163,8 +166,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cheats\Aimbot.cpp" />
+    <ClCompile Include="Cheats\AutoPistol.cpp" />
     <ClCompile Include="Cheats\Bhop.cpp" />
+    <ClCompile Include="Cheats\Knifebot.cpp" />
     <ClCompile Include="Cheats\Overlay.cpp" />
+    <ClCompile Include="Cheats\RecoilCrosshair.cpp" />
     <ClCompile Include="Cheats\TriggerBot.cpp" />
     <ClCompile Include="Components\Entity.cpp" />
     <ClCompile Include="Components\LocalPlayer.cpp" />

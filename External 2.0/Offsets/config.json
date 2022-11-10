@@ -662,6 +662,11 @@
       "prop": "m_fAccuracyPenalty",
       "table": "DT_WeaponCSBase"
     },
+	{
+      "name": "m_fSpread",
+      "prop": "m_fSpread",
+      "table": "DT_WeaponCSBase"
+    },
     {
       "name": "m_fFlags",
       "prop": "m_fFlags",

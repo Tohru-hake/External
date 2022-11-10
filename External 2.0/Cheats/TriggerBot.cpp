@@ -5,6 +5,7 @@ bool triggerbot::bTriggerEnabled = false;
 int triggerbot::TriggerKey = 0;
 int triggerbot::iMinDelay = 1;
 int triggerbot::iMaxDelay = 50;
+
 bool triggerbot::ShouldTriggerbot(const int crosshairId)
 {
 

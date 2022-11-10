@@ -46,8 +46,10 @@ INT APIENTRY WinMain(HINSTANCE instance, HINSTANCE, PSTR, INT cmd_show)
 	std::thread BhopThread(bhop::init);
 	std::thread TriggerThread(triggerbot::init);
 	std::thread AimbotThread(Aimbot::init);
+	std::thread RecoilCrosshairThread(RecoilCrosshair::init);
 	std::thread OverlayThread(Overlay::init, instance, cmd_show);
-
+	std::thread AutoPistolThread(autopistol::init);
+	std::thread Knifebot(Knifebot::init);
 
 	std::thread closeThread(close);
 	// wait for the closeThread. This will ensure main never aborts.
