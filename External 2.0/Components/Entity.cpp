@@ -108,8 +108,11 @@ bool Entity::getEntImmunity(DWORD playerBase)
 
 DWORD Entity::getActiveWeapon(DWORD playerBase)
 {
-	DWORD WeaponIndex = rpm<DWORD>(playerBase + hazedumper::netvars::m_hActiveWeapon) & 0xFFF;
-	return rpm<DWORD>((baseAddress + hazedumper::signatures::dwEntityList + WeaponIndex * 0x10) - 0x10);
+	std::uintptr_t iCurWeaponAdr = rpm<std::uintptr_t>(playerBase + hazedumper::netvars::m_hActiveWeapon) & 0xFFF;
+	std::uintptr_t iBase = rpm<std::uintptr_t>(baseAddress + hazedumper::signatures::dwEntityList + (iCurWeaponAdr - 1) * 0x10);
+	int id = rpm <int>(iBase + hazedumper::netvars::m_iItemDefinitionIndex);
+
+	return id;
 }
 
 ////Uses ClassID

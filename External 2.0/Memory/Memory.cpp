@@ -148,6 +148,8 @@ void init()
 		LocalPlayer::setLocalPlayer();
 
 		clientState = rpm<DWORD>(engineAddress + hazedumper::signatures::dwClientState);
+
+
 	}
 	else
 	{

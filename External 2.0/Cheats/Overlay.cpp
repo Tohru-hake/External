@@ -1,5 +1,7 @@
 #include "Overlay.hpp"
 #include "../Memory/Memory.hpp"
+#include "../Util/GetGunIcon.hpp"
+#include "../Util/weaponicons.h"
 
 bool Overlay::bMenuVisible = false;
 int Overlay::iTab = 0;
@@ -7,6 +9,8 @@ int Overlay::iTab = 0;
 bool Overlay::bBoxes = false;
 bool Overlay::bHealthbar = false;
 bool Overlay::bRecoilCrosshair = false;
+bool Overlay::bWeaponEsp = false;
+
 int RecoilCrosshair::opacity = 0;
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND, UINT, WPARAM, LPARAM);
 
@@ -253,6 +257,12 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
 
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
+    ImFontConfig config;
+    config.SizePixels = 100.f;
+    config.OversampleH = config.OversampleV = 1;
+    config.PixelSnapH = true;
+    ImFont* fontA = ImGui::GetIO().Fonts->AddFontDefault(&config);
+    ZeroMemory(&config, sizeof(config));
 
     ImGui_ImplWin32_Init(window);
     ImGui_ImplDX11_Init(device, device_context);
@@ -273,7 +283,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
         if (!running) {
             break;
         }
-
+        
         ImGui_ImplDX11_NewFrame();
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
@@ -283,6 +293,9 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
             const DWORD Base = Entity::getEntBase(i);
 
             if (!Base)
+                continue;
+
+            if (!Entity::isValid(Base))
                 continue;
 
             if (!(Entity::isAlive(Base) && Entity::getEntTeam(Base) != 0))
@@ -301,41 +314,41 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
                 const float h = bottom.y - top.y;
                 const float w = h * 0.35f;
 
-                if (Entity::isDormant(Base))
+                if (Overlay::bBoxes)
                 {
-                    if (Overlay::bBoxes)
-                    {
-                        ImGui::GetBackgroundDrawList()->AddRect({ top.x - w, top.y }, { top.x + w, bottom.y }, ImColor(100.f, 100.f, 100.f), 10.f);
-                    }
+                    ImGui::GetBackgroundDrawList()->AddRect({ top.x - w, top.y }, { top.x + w, bottom.y }, ImColor(255.f, 255.f, 255.f));
                 }
-                else
-                {
-                    if (Overlay::bBoxes)
-                    {
-                        ImGui::GetBackgroundDrawList()->AddRect({ top.x - w, top.y }, { top.x + w, bottom.y }, ImColor(255.f, 255.f, 255.f));
-                    }
                     
-                    if (Overlay::bHealthbar)
-                    {
-                        float box_h = (float)fabs(bottom.y - top.y);
+                if (Overlay::bHealthbar)
+                {
+                    float box_h = (float)fabs(bottom.y - top.y);
 
-                        float offset = 8;
+                    float offset = 8;
 
-                        int height = (box_h * Entity::getEntHp(Base)) / 100;
+                    int height = (box_h * Entity::getEntHp(Base)) / 100;
 
 
-                        int green = int(Entity::getEntHp(Base) * 2.55f);
-                        int red = 255 - green;
+                    int green = int(Entity::getEntHp(Base) * 2.55f);
+                    int red = 255 - green;
 
-                        int x = top.x - w - offset;
-                        int y = bottom.y;
-                        int w = 4;
-                        int h = box_h;
+                    int x = top.x - w - offset;
+                    int y = bottom.y;
+                    int w = 4;
+                    int h = box_h;
 
-                        RenderBox(x, y, x + w, y - h, ImColor(0, 0, 0), 1.f, true);
-                        RenderBox(x + 1, y - 2, x + w - 1, y - height + 1, ImColor(red, green, 0, 255), 1.f, true);
-                    }
+                    RenderBox(x, y, x + w, y - h, ImColor(0, 0, 0), 1.f, true);
+                    RenderBox(x + 1, y - 2, x + w - 1, y - height + 1, ImColor(red, green, 0, 255), 1.f, true);
                 }
+
+                if (Overlay::bWeaponEsp)
+                {
+                    int help = Entity::getActiveWeapon(Base);
+
+                   ImGui::PushFont(fontA);
+                   ImGui::GetBackgroundDrawList()->AddText({( bottom.x - ImGui::CalcTextSize(GetGunIcon(help)).x) + 3.f, bottom.y}, ImColor(255, 255, 255), GetGunIcon(help));
+                   ImGui::PopFont();
+                }
+                
             }
         }
 
@@ -348,7 +361,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
             float dx = Width / 90;
             x -= (dx * (LocalPlayer::getLocalPunchAngles().y));
             y += (dy * (LocalPlayer::getLocalPunchAngles().x));
-
+            
             ImGui::GetBackgroundDrawList()->AddCircle({ x, y }, 5.f, ImColor(255, 255, 255, RecoilCrosshair::opacity), 0, 2.f);
         }
 
@@ -417,7 +430,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
                 {
                     ImGui::Text("Aim Key");
                     ImGui::SameLine();
-                    ImGui::Hotkey(&Aimbot::AimKey);
+                    //ImGui::Hotkey(&Aimbot::AimKey);
                     ImGui::SliderFloat("Fov", &Aimbot::fFov, 1.f, 10.f);
                     ImGui::SliderFloat("Smoothing", &Aimbot::fSmoothing, 1.f, 10.f);
 
@@ -453,7 +466,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
                 {
                     ImGui::Text("Trigger Key");
                     ImGui::SameLine();
-                    ImGui::Hotkey(&triggerbot::TriggerKey);
+                    //ImGui::Hotkey(&triggerbot::TriggerKey);
 
                     ImGui::SliderInt("Delay Min", &triggerbot::iMinDelay, 1, 100);
                     ImGui::SliderInt("Delay Max", &triggerbot::iMaxDelay, 1, 100);
@@ -465,6 +478,7 @@ int Overlay::init(HINSTANCE instance, INT cmd_show)
                 ImGui::Checkbox("Boxes", &Overlay::bBoxes);
                 ImGui::Checkbox("Health Bar", &Overlay::bHealthbar);
                 ImGui::Checkbox("Recoil crosshair", &Overlay::bRecoilCrosshair);
+                ImGui::Checkbox("Weapons", &Overlay::bWeaponEsp);
                 break;
             }
             case 3:

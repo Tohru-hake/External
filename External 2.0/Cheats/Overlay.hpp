@@ -22,7 +22,7 @@ namespace Overlay
     extern bool bBoxes;
     extern bool bHealthbar;
     extern bool bRecoilCrosshair;
-    
+    extern bool bWeaponEsp;
 
     extern bool bMenuVisible;
     HWND FindTopWindow(DWORD pid);

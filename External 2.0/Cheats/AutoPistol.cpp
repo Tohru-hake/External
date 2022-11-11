@@ -7,6 +7,7 @@ void autopistol::init()
 {
 	while (true) // Run forever.
 	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		if (!Overlay::FindTopWindow(pID))
 			continue;
 

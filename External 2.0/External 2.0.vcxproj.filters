@@ -87,6 +87,12 @@
     <ClInclude Include="Cheats\Knifebot.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Util\GetGunIcon.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\weaponicons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Memory\Memory.cpp">

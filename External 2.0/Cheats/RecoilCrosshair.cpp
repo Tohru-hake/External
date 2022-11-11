@@ -4,6 +4,7 @@ void RecoilCrosshair::init()
 {
     while (true)
     {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
         while (LocalPlayer::getShotsFired() && Overlay::bRecoilCrosshair && opacity < 255)
         {
             opacity++;

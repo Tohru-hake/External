@@ -43,6 +43,7 @@ void triggerbot::init()
 {
 	while (true) // Run forever.
 	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		if (!ShouldTriggerbot(LocalPlayer::getLocalCrossID()))
 			continue;
 

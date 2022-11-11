@@ -20,6 +20,7 @@ void Knifebot::init()
 
 	while (true)
 	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		if (!Entity::isWeaponKnife(LocalPlayer::getLocalWeapon()))
 			continue;
 
@@ -51,8 +52,6 @@ void Knifebot::init()
 			{
 				back = true;
 			}
-
-
 
 			if (distance(LocalPlayer::getLocalPos(), EnemyPos) <= 65 && (back || EnemyHP <= 55)) {
 

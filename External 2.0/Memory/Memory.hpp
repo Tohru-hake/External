@@ -10,6 +10,7 @@ extern DWORD baseAddress;
 extern DWORD engineAddress;
 extern DWORD clientState;
 
+
 //Vars for process snapshot
 extern HANDLE hProcSnap;
 extern PROCESSENTRY32 procEntry32;

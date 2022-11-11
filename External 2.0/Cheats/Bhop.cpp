@@ -7,6 +7,7 @@ void bhop::init()
 {
 	while (true)
 	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		if (bhop::iMinDelay > bhop::iMaxDelay)
 		{
 			bhop::iMaxDelay = iMinDelay;
